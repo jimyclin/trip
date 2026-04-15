@@ -4,261 +4,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 奧捷德家族旅遊手冊 (含圖片版)</title>
+    <title>2026 奧捷德跨世代家族之旅 - 完整行程手冊</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #d35400;
-            --bg: #f4f7f6;
-            --white: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --vienna-color: #2980b9;
+            --prague-color: #c0392b;
+            --ck-color: #e67e22;
+            --salzburg-color: #8e44ad;
+            --hallstatt-color: #16a085;
+            --munich-color: #27ae60;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
         }
-        body {
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            color: #333;
-        }
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=2072&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .container {
-            max-width: 800px;
-            margin: -50px auto 50px;
-            padding: 20px;
-        }
-        .day-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 0;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-        .day-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .day-content {
-            padding: 20px;
-        }
-        .day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        .day-num {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--accent);
-        }
-        .day-date {
-            color: #7f8c8d;
-        }
-        .section-title {
-            color: var(--primary);
-            font-weight: bold;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-        }
-        .section-title::before {
-            content: '📍';
-            margin-right: 5px;
-        }
-        .transport-box {
-            background: #eef2f3;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-size: 0.9em;
-        }
-        .hotel-box {
-            background: #fff8e1;
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
-            margin-top: 10px;
-        }
-        .badge {
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            margin-right: 5px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
+        body { font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; margin: 0; padding: 0; }
+        .header { background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); color: white; padding: 50px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .info-panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #fdbb2d; }
+        .day-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+        .day-header { padding: 15px 20px; color: white; display: flex; justify-content: space-between; align-items: center; font-size: 1.2em; font-weight: bold; }
+        .vienna-bg { background-color: var(--vienna-color); }
+        .prague-bg { background-color: var(--prague-color); }
+        .ck-bg { background-color: var(--ck-color); }
+        .salzburg-bg { background-color: var(--salzburg-color); }
+        .hallstatt-bg { background-color: var(--hallstatt-color); }
+        .munich-bg { background-color: var(--munich-color); }
+        
+        .card-image { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .section-title { font-size: 0.9em; text-transform: uppercase; color: var(--text-light); margin: 15px 0 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .detail-item { margin-bottom: 10px; display: flex; }
+        .tag { padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; color: white; margin-right: 10px; height: fit-content; min-width: 40px; text-align: center; }
+        .tag-trans { background-color: #34495e; }
+        .tag-hotel { background-color: #d35400; }
+        .tag-act { background-color: #2980b9; }
+        
+        .highlight-box { background: #fff8e1; border: 1px dashed #f39c12; padding: 10px 15px; border-radius: 8px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="hero">
-    <h1>2026 奧捷德跨世代家族之旅</h1>
-    <p>維也納 · 布拉格 · 薩爾斯堡 · 哈修塔特 · 慕尼黑</p>
+<div class="header">
+    <h1>奧捷德 15日跨世代家族漫遊</h1>
+    <p>4月25日 — 5月9日 | 慢活 · 舒適 · 深度體驗</p>
 </div>
 
 <div class="container">
+    <div class="info-panel">
+        <strong>👨‍👩‍👧‍👦 團隊：</strong> 3位青壯年 + 2位長輩 (66歲) + 1位寶寶 (1歲5個月)<br>
+        <strong>💡 備註：</strong> 4/25 為週六，5/1 為勞動節假日。行程保持彈性，隨時可休息。
+    </div>
 
     <!-- Day 1 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1573074617613-fc8ef27eaa2f?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Vienna">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 1</span>
-                <span class="day-date">4/25 (六) 抵達維也納</span>
-            </div>
-            <div class="section-title">今日亮點</div>
-            <p>07:15 抵達維也納機場。前往美泉宮 (Schönbrunn Palace) 享受廣闊平坦的花園，適合推車散步。</p>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> 維也納西站美居酒店 (Hotel Mercure Wien Westbahnhof)
-            </div>
+        <div class="day-header vienna-bg"><span>Day 1: 啟程與初見維也納</span><span>4/25 (六)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sch%C3%B6nbrunn_Palace_-_Vienna%2C_Austria_-_August_26%2C_2021.jpg/800px-Sch%C3%B6nbrunn_Palace_-_Vienna%2C_Austria_-_August_26%2C_2021.jpg" class="card-image" alt="維也納">
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">抵達</span> <div>07:15 抵達維也納機場，前往飯店寄放行李。</div></div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>下午：熊布朗宮 (美泉宮) 散步，園區平坦適合推車。</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">飯店</span> <div><strong>維也納西站美居酒店</strong><br>Felberstraße 4, 1150 Wien<br>入住: 15:00 / 退房: 12:00</div></div>
         </div>
     </div>
 
     <!-- Day 2 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1600100397608-f09074aa80e4?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Ribs">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 2</span>
-                <span class="day-date">4/26 (日) 維也納美食與文化</span>
-            </div>
-            <div class="section-title">今日亮點</div>
-            <p>12:00 預約 Ribs of Vienna。下午漫步聖史蒂芬大教堂與格拉本大街。</p>
+        <div class="day-header vienna-bg"><span>Day 2: 維也納經典饗宴</span><span>4/26 (日)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">預約</span> <div><strong>12:00 中餐：Ribs of Vienna</strong><br>Weihburggasse 22, 1010 Wien</div></div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>聖史蒂芬大教堂、霍夫堡皇宮、格拉本大街漫步。</div></div>
+        </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-card">
+        <div class="day-header vienna-bg"><span>Day 3: 藝術與公園悠遊</span><span>4/27 (一)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>上午：美景宮 (Belvedere Palace) 花園散步。<br>下午：百水公寓 或 普拉特遊樂園 (搭乘摩天輪)。</div></div>
         </div>
     </div>
 
     <!-- Day 4 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1513807016779-d51c0c026263?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Prague">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 4</span>
-                <span class="day-date">4/28 (二) 前往布拉格</span>
-            </div>
-            <div class="transport-box">
-                🚆 OBB 11:10 (Wien Hbf) ➔ 15:23 (Praga hl.n.) | Coach 21, Seat 24-28
-            </div>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> 布拉格 Prague 1 公寓
-            </div>
+        <div class="day-header prague-bg"><span>Day 4: 跨國移動至布拉格</span><span>4/28 (二)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Prague_Charles_Bridge_at_Dawn_HDR.jpg/800px-Prague_Charles_Bridge_at_Dawn_HDR.jpg" class="card-image" alt="布拉格">
+        <div class="card-body">
+            <div class="section-title">城際交通</div>
+            <div class="detail-item"><span class="tag tag-trans">OBB</span> <div><strong>維也納 ➔ 布拉格</strong><br>11:10 Wien Hbf ➔ 15:23 Praga hl.n.<br>2nd class, coach21, Seat 24~28 (共6站)</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">公寓</span> <div><strong>布拉格 Prague 1</strong><br>Rybná 732/25, Prague 1<br>入住: 15:00 / 退房: 11:00</div></div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>傍晚：老城廣場漫步，看天文鐘與泰恩教堂。</div></div>
         </div>
     </div>
 
     <!-- Day 5 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1541849546-216549ae216d?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Kutna Hora">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 5</span>
-                <span class="day-date">4/29 (三) 庫特納霍拉</span>
-            </div>
-            <div class="section-title">今日亮點</div>
-            <p>12:30 參加庫特納霍拉半日遊 (人骨教堂與聖芭芭拉大教堂)。</p>
+        <div class="day-header prague-bg"><span>Day 5: 探秘人骨教堂</span><span>4/29 (三)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>上午：查理大橋 (早上人較少，推車好推)。</div></div>
+            <div class="detail-item"><span class="tag tag-act">預約</span> <div><strong>12:30 庫特納霍拉半日遊</strong><br>聖芭芭拉大教堂和人骨教堂 (集合：Booth Premiant City Tour)</div></div>
+        </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="day-card">
+        <div class="day-header prague-bg"><span>Day 6: 布拉格城堡區</span><span>4/30 (四)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>上午：布拉格城堡。💡 建議搭車到最高點「往下走」，長輩免爬坡。<br>下午：小城區與藍儂牆。</div></div>
+        </div>
+    </div>
+
+    <!-- Day 7 -->
+    <div class="day-card">
+        <div class="day-header prague-bg"><span>Day 7: 伏爾塔瓦河遊船</span><span>5/1 (五)</span></div>
+        <div class="card-body">
+            <div class="highlight-box">⚠️ 今日為勞動節，超市商店不營業，景點餐廳大多正常。</div>
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>伏爾塔瓦河遊船 (免走路賞景) 或 佩特任山纜車。</div></div>
         </div>
     </div>
 
     <!-- Day 8 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1578330105307-8e6d23194553?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Cesky Krumlov">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 8</span>
-                <span class="day-date">5/2 (六) 捷克童話小鎮</span>
-            </div>
-            <div class="transport-box">
-                🚐 CK Shuttle 11:00 出發。中途停靠赫盧博卡城堡 (Hluboká) 1小時。
-            </div>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> CK小鎮 城堡景觀公寓
-            </div>
+        <div class="day-header ck-bg"><span>Day 8: 前往童話小鎮</span><span>5/2 (六)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cesky_Krumlov_panorama.jpg/800px-Cesky_Krumlov_panorama.jpg" class="card-image" alt="CK小鎮">
+        <div class="card-body">
+            <div class="section-title">城際交通</div>
+            <div class="detail-item"><span class="tag tag-trans">包車</span> <div><strong>CK Shuttle: 布拉格 ➔ CK小鎮</strong><br>11:00 出發 ➔ 14:56 抵達<br>中途停留：赫盧博卡城堡 1小時 (建議先吃早午餐)</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">公寓</span> <div><strong>城堡景觀公寓</strong><br>Šatlavská 140, Český Krumlov<br>入住: 14:00 / 退房: 10:00</div></div>
+            <div class="highlight-box">⚠️ CK小鎮為石板路，推車較震，建議備妥嬰兒揹巾。</div>
         </div>
     </div>
 
     <!-- Day 9 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Salzburg">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 9</span>
-                <span class="day-date">5/3 (日) 前往薩爾斯堡</span>
-            </div>
-            <div class="transport-box">
-                🚐 CK Shuttle 10:00 出發。中途停靠林茲 (Linz) 1小時。
-            </div>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> 薩爾斯堡花園套房
-            </div>
+        <div class="day-header salzburg-bg"><span>Day 9: 莫札特的故鄉</span><span>5/3 (日)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Salzburg_panorama.jpg/800px-Salzburg_panorama.jpg" class="card-image" alt="薩爾斯堡">
+        <div class="card-body">
+            <div class="section-title">城際交通</div>
+            <div class="detail-item"><span class="tag tag-trans">包車</span> <div><strong>CK Shuttle: CK小鎮 ➔ 薩爾斯堡</strong><br>10:00 出發 ➔ 14:13 抵達<br>中途停留：林茲 (Linz) 1小時 (建議先吃早午餐)</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">套房</span> <div><strong>薩爾斯堡的花園套房</strong><br>Vogelweiderstraße 52, Salzburg<br>入住: 16:00 / 退房: 11:00</div></div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>下午：米拉貝爾宮花園、糧食胡同散步。</div></div>
         </div>
     </div>
 
     <!-- Day 10 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1520156557489-357438344bc9?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Hallstatt">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 10</span>
-                <span class="day-date">5/4 (一) 仙境哈修塔特</span>
-            </div>
-            <div class="transport-box">
-                🚆 OBB 11:11 (Salzburg) ➔ 13:52 (Obertraun)
-            </div>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> Obertraun 小木屋
-            </div>
+        <div class="day-header hallstatt-bg"><span>Day 10: 走進明信片風景</span><span>5/4 (一)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Hallstatt_300.jpg/800px-Hallstatt_300.jpg" class="card-image" alt="哈修塔特">
+        <div class="card-body">
+            <div class="section-title">城際交通</div>
+            <div class="detail-item"><span class="tag tag-trans">OBB</span> <div><strong>薩爾斯堡 ➔ 哈修塔特 (Obertraun)</strong><br>11:11 Salzburg ➔ 13:52 Obertaun<br>2nd class, coach 1, seat 11-15,18 (須轉火車+接駁巴士)</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">木屋</span> <div><strong>Obertraun的小木屋</strong><br>Obertraun 302<br>入住: 16:00 / 退房: 10:00</div></div>
+        </div>
+    </div>
+
+    <!-- Day 11 -->
+    <div class="day-card">
+        <div class="day-header hallstatt-bg"><span>Day 11: 湖畔放空與世界最美小鎮</span><span>5/5 (二)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>全天：前往對岸的哈修塔特 (Hallstatt) 漫步，經典明信片角度拍照，搭乘纜車上山看絕美湖景。<br>(鹽礦階梯較多，長輩與寶寶不建議參加)</div></div>
         </div>
     </div>
 
     <!-- Day 12 -->
     <div class="day-card">
-        <img src="https://images.unsplash.com/photo-1595867818082-083862f3d630?q=80&w=2000&auto=format&fit=crop" class="day-img" alt="Munich">
-        <div class="day-content">
-            <div class="day-header">
-                <span class="day-num">Day 12</span>
-                <span class="day-date">5/6 (三) 慕尼黑</span>
-            </div>
-            <div class="transport-box">
-                🚐 CK Shuttle 10:00 前往慕尼黑。
-            </div>
-            <div class="hotel-box">
-                <span class="badge">住宿</span> 慕尼黑 迪馬斯市酒店
-            </div>
+        <div class="day-header munich-bg"><span>Day 12: 啟程前往德國</span><span>5/6 (三)</span></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Marienplatz_M%C3%BCnchen.jpg/800px-Marienplatz_M%C3%BCnchen.jpg" class="card-image" alt="慕尼黑">
+        <div class="card-body">
+            <div class="section-title">城際交通</div>
+            <div class="detail-item"><span class="tag tag-trans">包車</span> <div><strong>CK Shuttle: 哈修塔特 ➔ 慕尼黑</strong><br>10:00 出發 (建議先吃早午餐)</div></div>
+            <div class="section-title">住宿資訊</div>
+            <div class="detail-item"><span class="tag tag-hotel">飯店</span> <div><strong>迪馬斯市酒店</strong><br>Landwehrstraße 19, 80336 München<br>入住: 15:00 / 退房: 11:00</div></div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>下午：瑪利亞廣場看新市政廳、穀物市場吃小吃。</div></div>
+        </div>
+    </div>
+
+    <!-- Day 13 -->
+    <div class="day-card">
+        <div class="day-header munich-bg"><span>Day 13: 皇宮與現代科技</span><span>5/7 (四)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>上午：寧芬堡宮 (平坦好推車)。<br>下午：BMW 世界 (室內冷氣舒適、電梯完善)。</div></div>
+        </div>
+    </div>
+
+    <!-- Day 14 -->
+    <div class="day-card">
+        <div class="day-header munich-bg"><span>Day 14: 慕尼黑市區慢遊</span><span>5/8 (五)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">建議</span> <div>上午：慕尼黑王宮。<br>下午：英國花園散步。<br>晚上：皇家啤酒屋 (Hofbräuhaus) 德國豬腳大餐。</div></div>
         </div>
     </div>
 
     <!-- Day 15 -->
-    <div class="day-card" style="border-top: 5px solid var(--accent);">
-        <div class="day-content" style="text-align: center;">
-            <div class="day-num">Day 15</div>
-            <div class="day-date">5/9 (六) 返台</div>
-            <p>12:00 慕尼黑機場，平安歸賦。</p>
+    <div class="day-card">
+        <div class="day-header munich-bg"><span>Day 15: 滿載回憶歸國</span><span>5/9 (六)</span></div>
+        <div class="card-body">
+            <div class="section-title">今日活動</div>
+            <div class="detail-item"><span class="tag tag-act">航班</span> <div><strong>12:00 班機</strong> 從慕尼黑離開。</div></div>
+            <div class="detail-item"><span class="tag tag-act">提醒</span> <div>早上辦理退稅手續，完美結束旅程！</div></div>
         </div>
     </div>
 
 </div>
-
-<footer>
-    <p>3位青壯年 + 2位長輩 + 1位寶寶 | 奧捷德家族旅行團專屬</p>
-</footer>
-
 </body>
 </html>
