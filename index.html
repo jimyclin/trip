@@ -2,8 +2,8 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>2026 奧捷德跨世代親情之旅 - 全互動旅程攻略地圖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 奧捷德跨世代親情之旅 - 全互動旅程攻略地圖 (線條升級版)</title>
 <style>
     :root {
         --vienna-color: #e67e22;
@@ -12,6 +12,7 @@
         --salzburg-color: #9b59b6;
         --hallstatt-color: #1abc9c;
         --munich-color: #27ae60;
+        --connection-color: #fdd835;
         --background-color: #fdfbf7;
         --panel-background: #ffffff;
         --text-color: #333;
@@ -25,8 +26,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* Prevent body scrolling on mobile while panel is open if needed,
-           but better handling in JS later. For now, allow body scroll for general use. */
     }
 
     header {
@@ -37,23 +36,21 @@
         text-align: center;
         width: 100%;
         max-width: 900px;
-        z-index: 1; /* Above map scroller */
+        z-index: 5;
         position: relative;
     }
 
     header h1 {
         margin: 0;
-        font-size: 1.8em;
+        font-size: 2em;
         color: #333;
     }
 
     header p {
         margin: 5px 0 0;
         color: #777;
-        font-size: 0.9em;
     }
 
-    /* Mobile UX Tip Header */
     .mobile-tip {
         background: #fff3cd;
         color: #856404;
@@ -62,7 +59,7 @@
         width: 100%;
         text-align: center;
         border-radius: 0 0 10px 10px;
-        display: none; /* Hidden by default, shown via media query */
+        display: none;
     }
 
     @media (max-width: 900px) {
@@ -70,25 +67,33 @@
         header h1 { font-size: 1.5em; }
     }
 
-    /* New Scrollable Map Container */
     #map-scroller {
         width: 100%;
         max-width: 900px;
-        overflow-x: auto; /* Enable horizontal scrolling */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        margin-top: 20px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 30px;
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        z-index: 0; /* Below panels */
+        z-index: 0;
     }
 
-    /* Map view holds original coordinates/background */
     #map-viewport {
         position: relative;
-        width: 900px; /* Fixed width matching markers' coordinates scale */
+        width: 900px;
         height: 600px;
-        background: #fcf6e9; /* Simple placeholder background */
-        cursor: default; /* Default cursor for map area */
+        background: #fcf6e9;
+        cursor: default;
+    }
+
+    /* Connection Lines - SVG with drawing animation */
+    #connection-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
     }
 
     .marker {
@@ -97,7 +102,7 @@
         height: 45px;
         cursor: pointer;
         transition: transform 0.3s ease;
-        z-index: 2; /* Markers above text/char group */
+        z-index: 2;
     }
 
     .marker:hover {
@@ -118,40 +123,36 @@
 
     /* Info Panels - Mobile First (Fixed centered overlay) */
     .info-panel {
-        display: none; /* JavaScript controls visibility */
-        position: fixed; /* Fixed relative to viewport on mobile */
+        display: none;
+        position: fixed;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -45%); /* Initial animate state slightly off */
-        width: 85%; /* Don't cover whole screen width */
-        max-width: 450px; /* Cap size on large phones/tablets */
-        max-height: 80%; /* Don't cover whole screen height */
+        transform: translate(-50%, -45%);
+        width: 85%;
+        max-width: 450px;
+        max-height: 80%;
         background-color: var(--panel-background);
         border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* High contrast shadow */
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         padding: 25px 20px 20px;
         overflow-y: auto;
-        z-index: 1000; /* Very high, above map, header, markers */
+        z-index: 1000;
         opacity: 0;
         transition: transform 0.3s ease, opacity 0.3s ease;
         border-width: 2px;
         border-style: solid;
-        box-sizing: border-box; /* Crucial for padding/width handling */
+        box-sizing: border-box;
     }
 
     .info-panel.visible {
         display: block;
         opacity: 1;
-        transform: translate(-50%, -50%); /* Final centered state */
+        transform: translate(-50%, -50%);
     }
 
-    /* Desktop Panel Override (Media Query Breakpoint) */
+    /* Desktop Panel Override (Fixed right) */
     @media (min-width: 901px) {
         .info-panel {
-            position: absolute; /* Revert to relative to container if container panned?
-                                   NO: If map panned, panels should still be pinned for UX.
-                                   Better approach on desktop is to stick to screen.
-                                   Let's make them fixed-right on desktop like previous. */
             position: fixed;
             top: 20px;
             right: 20px;
@@ -159,7 +160,7 @@
             transform: translateX(20px);
             opacity: 0;
             width: 350px;
-            max-height: calc(100vh - 40px); /* Fill most vertical screen space */
+            max-height: calc(100vh - 40px);
         }
         .info-panel.visible {
             transform: translateX(0);
@@ -172,7 +173,7 @@
         border-bottom: 2px solid;
         padding-bottom: 5px;
         font-size: 1.5em;
-        padding-right: 30px; /* Space for close button */
+        padding-right: 30px;
     }
 
     .info-panel ul {
@@ -196,18 +197,22 @@
         color: #555;
     }
 
+    .info-panel strong {
+        color: #e67e22;
+    }
+
     .close-btn {
         position: absolute;
         top: 15px;
         right: 15px;
-        font-size: 1.8em; /* Slightly larger on mobile */
+        font-size: 1.8em;
         font-weight: bold;
         color: #aaa;
         cursor: pointer;
         transition: color 0.2s ease, transform 0.2s ease;
-        z-index: 1001; /* Above panel content */
+        z-index: 1001;
         line-height: 1;
-        padding: 5px; /* Area expansion for touch */
+        padding: 5px;
     }
 
     .close-btn:hover {
@@ -225,7 +230,7 @@
     }
 
     .intergenerational-tips h3 {
-        color: #d35400; /* Distinct color for tips */
+        color: #d35400;
         margin-bottom: 10px;
         font-size: 1.1em;
     }
@@ -241,13 +246,12 @@
         margin-right: 10px;
     }
 
-    /* Characters and Icons */
     .char-group {
         position: absolute;
         bottom: 20px;
         left: 20px;
         font-size: 1.1em;
-        z-index: 0; /* Below markers and scrolling panels */
+        z-index: 0;
         color: #888;
     }
 </style>
@@ -256,12 +260,16 @@
 
 <header>
     <h1>奧捷德 跨世代親情之旅</h1>
-    <p>4/25 - 5/9 全互動旅程攻略地圖</p>
+    <p>4/25 - 5/9 全互動旅程攻略地圖 (線條升級版)</p>
 </header>
 <div class="mobile-tip">👉 手機用戶：地圖可水平拖動查看完整行程哦！</div>
 
 <div id="map-scroller" onclick="closeActivePanel(event)">
     <div id="map-viewport">
+        <svg id="connection-lines" viewBox="0 0 900 600" preserveAspectRatio="none">
+            <path id="route-path" d="" fill="none" stroke="var(--connection-color)" stroke-width="4" stroke-dasharray="" stroke-dashoffset="" stroke-linejoin="round" />
+        </svg>
+
         <div class="marker vienna" style="top: 250px; left: 600px; color: var(--vienna-color);" onclick="showPanel(event, 'vienna-panel')">
             <svg viewBox="0 0 384 512" fill="currentColor">
                 <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
@@ -322,7 +330,7 @@
     <div class="section">
         <h3>🍴 餐廳美食</h3>
         <ul>
-            <li><strong>Ribs of Vienna 中餐</strong> (4/26)</li>
+            <li><strong>12:00 Ribs of Vienna 中餐</strong> (4/26)</li>
             <li>薩赫蛋糕與 Sacher 咖啡</li>
             <li>Cafe Central 咖啡館</li>
             <li>維也納炸牛排 (Schnitzel)</li>
@@ -332,6 +340,7 @@
         <h3>🏨 住宿資訊</h3>
         <ul>
             <li><strong>Hotel Mercure Wien Westbahnhof</strong></li>
+            <li>Felberstraße 4, 1150 Wien, 奧地利</li>
             <li>入住 15:00 / 退房 12:00</li>
         </ul>
     </div>
@@ -339,6 +348,7 @@
         <h3>🚂 交通</h3>
         <ul>
             <li>OBI 鐵路 (Wien Hbf ➔ Praga hl.n.)</li>
+            <li><strong>11:10 出發 ➔ 15:23 抵達</strong> (coach21, Seat 24-28)</li>
         </ul>
     </div>
     <div class="intergenerational-tips">
@@ -356,10 +366,25 @@
         <ul>
             <li>老城廣場漫步、天文鐘</li>
             <li>查理大橋 (早晨)</li>
-            <li><strong>庫特納霍拉半日遊</strong> (人骨教堂、聖芭芭拉大教堂) (4/29)</li>
+            <li><strong>12:30 庫特納霍拉半日遊</strong> (4/29)</li>
             <li>布拉格城堡、小城區、藍儂牆</li>
             <li>伏爾塔瓦河遊船 (免走路賞景)</li>
             <li>佩特任山纜車 (Funicular)</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🏨 住宿資訊</h3>
+        <ul>
+            <li><strong>Residence Muzeum Vltavín</strong></li>
+            <li>Rybná 732/25, Prague 1, 捷克</li>
+            <li>入住 15:00 / 退房 11:00</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🚂 交通</h3>
+        <ul>
+            <li><strong>CK Shuttle 包車</strong> (布拉格 ➔ CK小鎮)</li>
+            <li><strong>11:00 出發 ➔ 14:56 抵達</strong></li>
         </ul>
     </div>
     <div class="intergenerational-tips">
@@ -381,10 +406,25 @@
             <li>護城河大熊、皇家花園</li>
         </ul>
     </div>
+    <div class="section">
+        <h3>🏨 住宿資訊</h3>
+        <ul>
+            <li><strong>城堡景觀公寓</strong></li>
+            <li>Šatlavská 140, Český Krumlov, 捷克</li>
+            <li>入住 14:00 / 退房 10:00</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🚂 交通</h3>
+        <ul>
+            <li><strong>CK Shuttle 包車</strong> (CK小鎮 ➔ 薩爾斯堡)</li>
+            <li><strong>10:00 出發 ➔ 14:13 抵達</strong> (中途停留 Linz)</li>
+        </ul>
+    </div>
     <div class="intergenerational-tips">
         <h3>👨‍👩‍👧‍👦 家族旅行貼心指南</h3>
         <div class="tip-item"><span class="tip-icon">⚠️</span>注意：石板路推車難行，請務必備妥嬰兒揹巾。</div>
-        <div class="tip-item"><span class="tip-icon">🚐</span>包車接送：Prague ➔ CK ➔ Salzburg，最省力、減少搬運。中途停靠 Hluboká 城堡和 Linz，方便長輩休息。</div>
+        <div class="tip-item"><span class="tip-icon">🚐</span>包車接送：Prague ➔ CK ➔ Salzburg，最省力、減少搬運。CK Shuttle 包車出發，中途停靠 Hluboká 城堡和 Linz，方便休息。</div>
     </div>
 </div>
 
@@ -398,6 +438,21 @@
             <li>糧食胡同與特色鐵鑄招牌</li>
             <li>莫札特出生地照片</li>
             <li>薩爾斯堡要塞 (Hohensalzburg Fortress) 纜車</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🏨 住宿資訊</h3>
+        <ul>
+            <li><strong>薩爾斯堡的花園套房</strong></li>
+            <li>Vogelweiderstraße 52, Salzburg, 奧地利</li>
+            <li>入住 16:00 / 退房 11:00</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🚂 交通</h3>
+        <ul>
+            <li>OBI 鐵路 (Salzburg ➔ Obertraun)</li>
+            <li><strong>11:11 出發 ➔ 13:52 抵達</strong> (須轉巴士)</li>
         </ul>
     </div>
     <div class="intergenerational-tips">
@@ -418,10 +473,25 @@
             <li>纜車上山天空步道 (Skywalk)</li>
         </ul>
     </div>
+    <div class="section">
+        <h3>🏨 住宿資訊</h3>
+        <ul>
+            <li><strong>Obertraun 的小木屋</strong></li>
+            <li>Obertraun 302, 奧地利</li>
+            <li>入住 16:00 / 退房 10:00</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h3>🚂 交通</h3>
+        <ul>
+            <li><strong>CK Shuttle 包車</strong> (哈修塔特 ➔ 慕尼黑)</li>
+            <li><strong>10:00 出發</strong> (直達飯店)</li>
+        </ul>
+    </div>
     <div class="intergenerational-tips">
         <h3>👨‍👩‍👧‍👦 家族旅行貼心指南</h3>
         <div class="tip-item"><span class="tip-icon">👶</span>考慮：不建議參加鹽礦導覽 (階梯多、地底滑梯)，推車上山到天空步道即可。</div>
-        <div class="tip-item"><span class="tip-icon">👵</span>長輩：搭纜車上天空步道看絕美湖景，鹽礦不建議參加.</div>
+        <div class="tip-item"><span class="tip-icon">👵</span>長輩：搭纜車上天空步道看絕美湖景，鹽礦不建議參加。</div>
     </div>
 </div>
 
@@ -441,9 +511,18 @@
         </ul>
     </div>
     <div class="section">
+        <h3>🏨 住宿資訊</h3>
+        <ul>
+            <li><strong>迪馬斯市酒店 (Demas Hotel City)</strong></li>
+            <li>Landwehrstraße 19, 80336 München, 德國</li>
+            <li>入住 15:00 / 退房 11:00</li>
+        </ul>
+    </div>
+    <div class="section">
         <h3>🚂 交通</h3>
         <ul>
-            <li>機場搭機 (5/9)</li>
+            <li>班機前往 VIE (5/9)</li>
+            <li><strong>12:00 班機離開</strong> (建議提早辦退稅)</li>
         </ul>
     </div>
     <div class="intergenerational-tips">
@@ -454,15 +533,57 @@
 </div>
 
 <script>
+    // Coordinates (x, y) for markers relative to 900x600 viewport
+    const coordinates = {
+        vienna: [600, 250],
+        prague: [450, 150],
+        ck: [420, 220],
+        salzburg: [480, 300],
+        hallstatt: [510, 320],
+        munich: [350, 280]
+    };
+
+    const route = ['vienna', 'prague', 'ck', 'salzburg', 'hallstatt', 'munich'];
+
+    // Convert coordinates to SVG path "d" attribute string
+    function getPathString() {
+        if (route.length < 2) return "";
+        let d = `M ${coordinates[route[0]][0]} ${coordinates[route[0]][1]}`;
+        for (let i = 1; i < route.length; i++) {
+            d += ` L ${coordinates[route[i]][0]} ${coordinates[route[i]][1]}`;
+        }
+        return d;
+    }
+
+    // Drawing connection and animating
+    function drawRoute() {
+        const path = document.getElementById('route-path');
+        const pathString = getPathString();
+        path.setAttribute('d', pathString);
+
+        // Calculate length for animation
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length + ' ' + length;
+        path.style.strokeDashoffset = length;
+        path.style.transition = 'none';
+        
+        // Trigger reflow to start transition
+        path.getBoundingClientRect();
+        
+        // Start animation
+        path.style.transition = 'stroke-dashoffset 2s ease-in-out';
+        path.style.strokeDashoffset = '0';
+    }
+
+    // Call drawRoute on load
+    window.onload = drawRoute;
+
     function closeActivePanel(event) {
         if (event) {
-            // Check if click IS the map container, not something inside it
-            // or if it's the close button
             if (event.target.id === 'map-scroller' || event.target.id === 'map-viewport' || event.target.classList.contains('close-btn')) {
                 hideAllPanels();
             }
         } else {
-            // General function without event, hide everything
             hideAllPanels();
         }
     }
@@ -475,13 +596,8 @@
     }
 
     function showPanel(event, panelId) {
-        // Prevent click from propagating to map container which closes panels
         if (event) event.stopPropagation();
-
-        // Hide all visible panels first
         hideAllPanels();
-
-        // Show the clicked panel
         var selectedPanel = document.getElementById(panelId);
         selectedPanel.classList.add('visible');
     }
