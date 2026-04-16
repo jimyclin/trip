@@ -35,6 +35,8 @@
         text-align: center;
         width: 100%;
         max-width: 900px;
+        z-index: 5; /* Ensure header is below panels if needed but above map */
+        position: relative;
     }
 
     header h1 {
@@ -58,6 +60,7 @@
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         overflow: hidden;
+        cursor: default; /* Default cursor for map area */
     }
 
     .marker {
@@ -66,6 +69,7 @@
         height: 45px;
         cursor: pointer;
         transition: transform 0.3s ease;
+        z-index: 1; /* Default z-index for markers */
     }
 
     .marker:hover {
@@ -97,13 +101,16 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         padding: 20px;
         overflow-y: auto;
-        z-index: 10;
-        transition: transform 0.5s ease;
+        z-index: 10; /* Panels appear above everything in map */
+        transform: translateX(20px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .info-panel.visible {
         display: block;
         transform: translateX(0);
+        opacity: 1;
     }
 
     .info-panel h2 {
@@ -111,6 +118,7 @@
         border-bottom: 2px solid;
         padding-bottom: 5px;
         font-size: 1.5em;
+        padding-right: 30px; /* Space for close button */
     }
 
     .info-panel ul {
@@ -131,6 +139,24 @@
         margin: 0 0 5px;
         font-size: 1em;
         color: #555;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.2s ease, transform 0.2s ease;
+        z-index: 11; /* Above panel content */
+        line-height: 1;
+    }
+
+    .close-btn:hover {
+        color: #333;
+        transform: scale(1.2);
     }
 
     .intergenerational-tips {
@@ -161,6 +187,7 @@
         bottom: 20px;
         left: 20px;
         font-size: 1.2em;
+        z-index: 0; /* Below markers */
     }
 </style>
 </head>
@@ -171,45 +198,46 @@
     <p>4/25 - 5/9 全互動旅程攻略地圖</p>
 </header>
 
-<div id="map-container">
-    <div class="marker vienna" style="top: 250px; left: 600px; color: var(--vienna-color);" onclick="showPanel('vienna-panel')">
+<div id="map-container" onclick="closeActivePanel(event)">
+    <div class="marker vienna" style="top: 250px; left: 600px; color: var(--vienna-color);" onclick="showPanel(event, 'vienna-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
             <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">維也納</div>
     </div>
-    <div class="marker prague" style="top: 150px; left: 450px; color: var(--prague-color);" onclick="showPanel('prague-panel')">
+    <div class="marker prague" style="top: 150px; left: 450px; color: var(--prague-color);" onclick="showPanel(event, 'prague-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
             <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">布拉格</div>
     </div>
-    <div class="marker ck" style="top: 220px; left: 420px; color: var(--ck-color);" onclick="showPanel('ck-panel')">
+    <div class="marker ck" style="top: 220px; left: 420px; color: var(--ck-color);" onclick="showPanel(event, 'ck-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
             <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">CK小鎮</div>
     </div>
-    <div class="marker salzburg" style="top: 300px; left: 480px; color: var(--salzburg-color);" onclick="showPanel('salzburg-panel')">
+    <div class="marker salzburg" style="top: 300px; left: 480px; color: var(--salzburg-color);" onclick="showPanel(event, 'salzburg-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
             <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">薩爾斯堡</div>
     </div>
-    <div class="marker hallstatt" style="top: 320px; left: 510px; color: var(--hallstatt-color);" onclick="showPanel('hallstatt-panel')">
+    <div class="marker hallstatt" style="top: 320px; left: 510px; color: var(--hallstatt-color);" onclick="showPanel(event, 'hallstatt-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
             <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">哈修塔特</div>
     </div>
-    <div class="marker munich" style="top: 280px; left: 350px; color: var(--munich-color);" onclick="showPanel('munich-panel')">
+    <div class="marker munich" style="top: 280px; left: 350px; color: var(--munich-color);" onclick="showPanel(event, 'munich-panel')">
         <svg viewBox="0 0 384 512" fill="currentColor">
-            <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
+            <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
         </svg>
         <div class="marker-label">慕尼黑</div>
     </div>
 
     <div id="vienna-panel" class="info-panel" style="border-color: var(--vienna-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--vienna-color);">維也納 (4/25 - 4/28)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -251,6 +279,7 @@
         </div>
     </div>
     <div id="prague-panel" class="info-panel" style="border-color: var(--prague-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--prague-color);">布拉格 (4/28 - 5/2)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -271,6 +300,7 @@
         </div>
     </div>
     <div id="ck-panel" class="info-panel" style="border-color: var(--ck-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--ck-color);">CK小鎮 (5/2 - 5/3)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -287,6 +317,7 @@
         </div>
     </div>
     <div id="salzburg-panel" class="info-panel" style="border-color: var(--salzburg-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--salzburg-color);">薩爾斯堡 (5/3 - 5/4)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -304,6 +335,7 @@
         </div>
     </div>
     <div id="hallstatt-panel" class="info-panel" style="border-color: var(--hallstatt-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--hallstatt-color);">哈修塔特 (5/4 - 5/6)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -320,6 +352,7 @@
         </div>
     </div>
     <div id="munich-panel" class="info-panel" style="border-color: var(--munich-color);">
+        <span class="close-btn" onclick="closeActivePanel(event)">×</span>
         <h2 style="color: var(--munich-color);">慕尼黑 (5/6 - 5/9)</h2>
         <div class="section">
             <h3>🔑 景點活動</h3>
@@ -352,12 +385,32 @@
 </div>
 
 <script>
-    function showPanel(panelId) {
-        // Hide all visible panels first
+    function closeActivePanel(event) {
+        // Prevent click inside panel content from closing it,
+        // but close if close button is clicked or map container is clicked.
+        if (event) {
+            event.stopPropagation();
+            // Allow close button to work, which is inside panel but stops propagation itself.
+            // If the target IS the container, close.
+            if (event.target.id === 'map-container' || event.target.classList.contains('close-btn')) {
+                hideAllPanels();
+            }
+        }
+    }
+
+    function hideAllPanels() {
         var panels = document.querySelectorAll('.info-panel');
         panels.forEach(function(panel) {
             panel.classList.remove('visible');
         });
+    }
+
+    function showPanel(event, panelId) {
+        // Prevent click from propagating to map container and closing panel immediately
+        if (event) event.stopPropagation();
+
+        // Hide all visible panels first
+        hideAllPanels();
 
         // Show the clicked panel
         var selectedPanel = document.getElementById(panelId);
